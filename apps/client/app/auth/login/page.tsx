@@ -1,9 +1,9 @@
 "use client"
 
-import { supaClient } from "../../../lib/client"
+import { supaClient } from "@/app/lib/supaclient"
 
 export default function Login(){
-    async function login(){
+    async function authG(){
         await supaClient.auth.signInWithOAuth({
             provider:"google",
             options:{
@@ -11,10 +11,9 @@ export default function Login(){
             }
         })
     }
-
     return (
         <div>
-            <button className="px-4 py-2 bg-black text-white rounded-md" onClick={login}>Signin With Google</button>
+            <button  onClick={authG}>Signin with google</button>
         </div>
     )
 }

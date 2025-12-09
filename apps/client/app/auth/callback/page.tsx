@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { supaClient } from "../../../lib/client";
+import { supaClient } from "@/app/lib/supaclient";
 
 export  default function AuthCallback() {
   const router = useRouter();
