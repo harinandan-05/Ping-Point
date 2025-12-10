@@ -1,12 +1,13 @@
 "use client"
 
-import axios from "axios"
-import { useRef } from "react"
+import axios, { AxiosResponse } from "axios"
+import { ReactNode, useRef, useState } from "react"
 
 export default function Gui(){
    const methodRef = useRef<HTMLSelectElement | null>(null)
    const urlRef = useRef<HTMLInputElement>(null)
    const bodyRef = useRef<HTMLInputElement>(null)
+   const [Res,SetRes] = useState<AxiosResponse | null>()
 
     async function SentReq(){
         const selectmethord = methodRef.current?.value
@@ -19,9 +20,9 @@ export default function Gui(){
             url: urlInfo,
             body:bodyInfo
         })
-        
-        return request
-
+            const GetReuqest = await axios.get("http://localhost:3001/api/v1/request/get")
+            SetRes(GetReuqest)
+            console.log(Res,"response from backend to fe")
         }
 
         if(selectmethord == "POST"){
@@ -30,11 +31,10 @@ export default function Gui(){
             url: urlInfo,
             body:bodyInfo
         })
-        
+
+
         return request
         }
-
-    
     }
 
     return (
@@ -54,6 +54,9 @@ export default function Gui(){
             </div>
             <div className="flex ml-100">
                 <button className="bg-white rounded-sm text-black mt-4 w-50 cursor-pointer"onClick={SentReq}>sent request</button>
+            </div>
+            <div>
+                {Res}
             </div>
             
         </div>

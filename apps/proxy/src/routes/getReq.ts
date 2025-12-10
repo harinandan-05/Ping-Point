@@ -7,20 +7,22 @@ getEnd.post('/request/get',async (req:Request,res:Response) =>{
     const methord = req.body.methord
     const url = req.body.url
     const body = req.body.body 
-
+    
+    let responsetext = {};
     
     const Request = await axios.get(url,{
         data:body
-    }) 
-    console.log(Request,"response from proxy server")
-    return res.status(200).json({msg:"response",Request})
+    })
+    responsetext =Request.data
+    await axios.post('http://localhost:3000/gui',responsetext) 
+    console.log(responsetext,"response from proxy server")
+    return res.status(200).json({msg:"response"})
 
     }
     catch(err){
         console.log(err)
         return res.status(500).json({msg:"server error"})
     }
-    
 })
 
 

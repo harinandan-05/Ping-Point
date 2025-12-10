@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/routes/getreq.ts"],"version":"5.9.2"}
+{"root":["./src/index.ts","./src/routes/getreq.ts","./src/routes/postreq.ts"],"version":"5.9.2"}
