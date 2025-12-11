@@ -1,40 +1,59 @@
 "use client"
 
 import axios, { AxiosResponse } from "axios"
-import { ReactNode, useRef, useState } from "react"
+import { promises } from "dns"
+import { request } from "http"
+import { ReactNode, useEffect, useRef, useState } from "react"
+
+interface response { 
+     status:any,
+     headers:any,
+     body:any,
+     statusText:any
+}
 
 export default function Gui(){
    const methodRef = useRef<HTMLSelectElement | null>(null)
    const urlRef = useRef<HTMLInputElement>(null)
    const bodyRef = useRef<HTMLInputElement>(null)
-   const [Res,SetRes] = useState<AxiosResponse | null>()
+   const [res ,Setres] = useState<response>()
 
+   console.log(res?.body,"body got")
+   console.log(res,"response from backend")
     async function SentReq(){
         const selectmethord = methodRef.current?.value
-        const urlInfo = urlRef.current?.value
-        const bodyInfo = bodyRef.current?.value 
 
         if(selectmethord == "GET"){
-            const request = await axios.post('http://localhost:3001/api/v1/request/get',{
-            methord :selectmethord,
-            url: urlInfo,
-            body:bodyInfo
-        })
-            const GetReuqest = await axios.get("http://localhost:3001/api/v1/request/get")
-            SetRes(GetReuqest)
-            console.log(Res,"response from backend to fe")
+             GetHandler()
         }
-
         if(selectmethord == "POST"){
-            const request = await axios.post('http://localhost:3001/api/v1/request/post',{
-            methord :selectmethord,
-            url: urlInfo,
-            body:bodyInfo
-        })
-
-
-        return request
+            PostHandler()
         }
+    }
+
+    
+    async function GetHandler(){
+        if(!urlRef.current?.value){
+            return
+        }
+        console.log(urlRef.current.value,"url value")
+        const Request = await axios.post("http://localhost:3001/api/v1/request/get",{
+            url:urlRef.current?.value
+        })
+        Setres(Request.data)
+        return Request
+    }
+
+    async function PostHandler(){
+        if(!urlRef.current?.value || !methodRef.current?.value || !bodyRef.current?.value){
+            return
+        }
+
+        const Request = await axios.post("http://localhost:3001/api/v1/request/post",{
+            url:urlRef.current.value,
+            methord:methodRef.current.value,
+            body:bodyRef.current.value
+        })
     }
 
     return (
@@ -56,9 +75,11 @@ export default function Gui(){
                 <button className="bg-white rounded-sm text-black mt-4 w-50 cursor-pointer"onClick={SentReq}>sent request</button>
             </div>
             <div>
-                {Res}
+                {res?.body}
+                {res?.headers.data}
+                {res?.status}
+                {res?.statusText}
             </div>
-            
         </div>
     )
 }

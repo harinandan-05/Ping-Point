@@ -4,24 +4,26 @@ const getEnd:Router = Router()
 
 getEnd.post('/request/get',async (req:Request,res:Response) =>{
     try{
-    const methord = req.body.methord
     const url = req.body.url
-    const body = req.body.body 
-    
-    let responsetext = {};
-    
-    const Request = await axios.get(url,{
-        data:body
-    })
-    responsetext =Request.data
-    await axios.post('http://localhost:3000/gui',responsetext) 
-    console.log(responsetext,"response from proxy server")
-    return res.status(200).json({msg:"response"})
+    console.log(url,"url reccived")
 
+    const response = await axios.get(url)
+    // console.log(response.data,"data got back data")
+    // console.log(response.headers,"data got back headers")
+    // console.log(response.status,"data got back status")
+    // console.log(response.data.body,"data got back data.body")
+    return res.json({
+        status:response.status,
+        headers:response.headers,
+        body:response.data.body,
+        statusText:response.statusText
+    })
     }
     catch(err){
         console.log(err)
-        return res.status(500).json({msg:"server error"})
+        return res.status(500).json({
+         msg:"server error"
+        })
     }
 })
 
