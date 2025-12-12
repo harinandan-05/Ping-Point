@@ -8,10 +8,7 @@ getEnd.post('/request/get',async (req:Request,res:Response) =>{
     console.log(url,"url reccived")
 
     const response = await axios.get(url)
-    // console.log(response.data,"data got back data")
-    // console.log(response.headers,"data got back headers")
-    // console.log(response.status,"data got back status")
-    // console.log(response.data.body,"data got back data.body")
+   
     return res.json({
         status:response.status,
         headers:response.headers,

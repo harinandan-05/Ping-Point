@@ -5,16 +5,30 @@ const postEnd:Router = Router()
 
 
 postEnd.post('/request/post',async(req:Request,res:Response) =>{
-    const urlinfo = req.body.url;
-    const methord = req.body.methord;
-    const body = req.body.body;
-
-    const response = await axios.post(urlinfo,body)
+    
+    try{
+    const {url,headers,body} = req.body
+    console.log(url,headers,body,"data got from fe")
+    const response = await axios.post(url,headers,body)
     if(!response){
         return res.status(400).json({msg:"failed to fetch"})
     }
 
+    return res.json({
+        headers:response.headers,
+        status:response.status,
+        statusText:response.statusText,
+        body:response.data
+    })
+
+    }catch(err){
+        return res.json({
+            msg:"server error"
+        })
+    }
 })
 
-
+postEnd.post('/post/test',(req,res) => {
+    return res.send("helloo")
+})
 export default postEnd;
